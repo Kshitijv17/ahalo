@@ -1,0 +1,40 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 text-center">
+      <h2 class="mb-4">OTP Verification</h2>
+      
+      <% if flash[:error] %>
+        <div class="alert alert-danger">
+          <%= flash[:error] %>
+        </div>
+      <% end %>
+
+      <%= form_tag verify_otp_path, method: :post do %>
+        <%= hidden_field_tag :email, @email %>
+        <%=  @email %>
+        
+        <div class="form-group">
+          <label for="otp">Enter the 4-digit OTP sent to your email</label>
+          <%= text_field_tag :otp, nil, 
+              class: 'form-control form-control-lg text-center', 
+              maxlength: 4,
+              required: true,
+              pattern: '[0-9]{4}',
+              placeholder: 'Enter 4-digit OTP' %>
+        </div>
+
+        <%= submit_tag "Verify OTP", class: 'btn btn-primary btn-lg mt-3' %>
+      <% end %>
+
+      <p class="mt-3">
+        Didn't receive the code? 
+        <%= link_to "Resend OTP", 
+            resend_otp_path(email: @email), 
+            method: :post, 
+            remote: true, 
+            class: 'text-primary',
+            data: { disable_with: "Sending..." } %>
+      </p>
+    </div>
+  </div>
+</div>

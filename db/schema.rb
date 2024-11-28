@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_27_095506) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_28_104300) do
   create_table "otp_verifications", force: :cascade do |t|
     t.integer "otp_code"
     t.string "email"
@@ -20,12 +20,25 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_27_095506) do
     t.index ["user_id"], name: "index_otp_verifications_on_user_id"
   end
 
+  create_table "sms_messages", force: :cascade do |t|
+    t.string "mobile_number"
+    t.string "message"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_sms_messages_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
     t.string "password_digest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "user_activated", default: false
+    t.string "uid"
+    t.string "provider"
+    t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
   add_foreign_key "otp_verifications", "users"

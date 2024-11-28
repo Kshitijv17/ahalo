@@ -2,8 +2,14 @@ source "https://rubygems.org"
 
 
 
+gem 'jwt'
 
+gem 'rack-cors'
+gem 'twilio-ruby'
 
+gem 'omniauth'
+gem 'omniauth-google-oauth2'
+gem 'omniauth-rails_csrf_protection'
 gem 'dotenv'
 gem 'activeadmin'
 gem 'devise'
