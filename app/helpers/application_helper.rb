@@ -8,4 +8,9 @@ module ApplicationHelper
   rescue
     false
   end
+
+  def cart_items_count
+    return 0 unless user_signed_in?
+    current_user.cart&.total_items || 0
+  end
 end

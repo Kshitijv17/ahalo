@@ -1,0 +1,159 @@
+
+  <div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-8">
+      <div class="card shadow-sm">
+        <div class="card-body p-4">
+          <h2 class="card-title text-center mb-4">Add New Product</h2>
+
+          <%= form_with model: @product, local: true, html: { class: "needs-validation", enctype: "multipart/form-data" } do |f| %>
+            <% if @product.errors.any? %>
+              <div class="alert alert-danger">
+                <h4>Error!</h4>
+                <ul>
+                  <% @product.errors.full_messages.each do |msg| %>
+                    <li><%= msg %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+
+            <div class="row g-3">
+              <!-- Product Name -->
+              <div class="col-12">
+                <div class="form-floating mb-3">
+                  <%= f.text_field :name, class: "form-control", placeholder: "Product Name", required: true %>
+                  <%= f.label :name, "Product Name", class: "form-label" %>
+                  <div class="invalid-feedback">
+                    Please provide a product name.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Status -->
+              <div class="col-md-6">
+                <div class="form-floating mb-3">
+                  <%= f.select :stats, 
+                      Product.stats.keys.map { |stats| [stats.titleize, stats] }, 
+                      { prompt: "Select Status" },
+                      { class: "form-select", required: true } 
+                  %>
+                  <%= f.label :stat, "Status", class: "form-label" %>
+                  <div class="invalid-feedback">
+                    Please select a status.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Category -->
+              <div class="col-md-6">
+                <div class="form-floating mb-3">
+                  <%= f.select :cat, 
+                      Product.cats.keys.map { |cat| [cat.titleize, cat] }, 
+                      { prompt: "Select Category" },
+                      { class: "form-select", required: true } 
+                  %>
+                  <%= f.label :cat, "Category", class: "form-label" %>
+                  <div class="invalid-feedback">
+                    Please select a category.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Image Upload -->
+              <div class="col-12">
+                <div class="mb-3">
+                  <label class="form-label">Product Image</label>
+                  <div class="image-upload-container">
+                    <div class="preview-container mb-3 d-none">
+                      <img id="image-preview" class="img-fluid rounded" style="max-height: 200px;">
+                    </div>
+                    <div class="upload-btn-wrapper">
+                      <%= f.file_field :avatar, 
+                          class: "form-control", 
+                          accept: "image/*",
+                          data: { 
+                            controller: "image-preview",
+                            action: "change->image-preview#preview"
+                          } 
+                      %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Submit Button -->
+              <div class="col-12">
+                <div class="d-grid gap-2">
+                  <%= f.submit "Create Product", class: "btn btn-primary btn-lg" %>
+                  <%= link_to "Cancel", products_path, class: "btn btn-outline-secondary" %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% content_for :head do %>
+  <style>
+    .image-upload-container {
+      border: 2px dashed #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      background: #f8f9fa;
+    }
+
+    .preview-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 200px;
+      background: #fff;
+      margin-bottom: 1rem;
+      border-radius: 4px;
+    }
+
+    .form-floating > .form-select {
+      padding-top: 1.625rem;
+      padding-bottom: 0.625rem;
+    }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Form validation
+      const form = document.querySelector('.needs-validation');
+      form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      });
+
+      // Image preview
+      const imageInput = document.querySelector('input[type="file"]');
+      const previewContainer = document.querySelector('.preview-container');
+      const imagePreview = document.getElementById('image-preview');
+
+      imageInput.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            imagePreview.src = e.target.result;
+            previewContainer.classList.remove('d-none');
+          }
+          reader.readAsDataURL(file);
+        } else {
+          imagePreview.src = '';
+          previewContainer.classList.add('d-none');
+        }
+      });
+    });
+  </script>
+<% end %>

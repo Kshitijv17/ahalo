@@ -1,0 +1,85 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Products</h1>
+    <%= link_to "Add New Product", new_product_path, class: "btn btn-primary" %>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-md-8">
+      <input class="form-control" id="productSearch" type="text" placeholder="Search products...">
+    </div>
+    <div class="col-md-4">
+      <%= form_with(url: products_path, method: :get, class: "d-flex", local: true) do |f| %>
+        <%= f.select :cat, 
+          Product.cats.keys.map { |cat| [cat.titleize, cat] }, 
+          { prompt: "All Categories" }, 
+          { class: "form-select", onchange: 'this.form.submit()' } 
+        %>
+      <% end %>
+    </div>
+  </div>
+  <div class="row mt-4">
+    <% if @product.any? %>
+      <% @product.each do |product| %>
+        <div class="col-md-4 col-lg-3 mb-4 product-card">
+          <div class="card h-100 shadow-sm">
+            <% if product.avatar.attached? %>
+              <%= image_tag product.avatar, class: "card-img-top", style: "height: 200px; object-fit: cover;" %>
+            <% else %>
+              <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                <span class="text-muted">No image</span>
+              </div>
+            <% end %>
+            <div class="card-body">
+              <h5 class="card-title"><%= link_to product.name,product_path(product.id),:class=>"card-title" %></h5>
+              <p class="card-text">
+                <span class="badge bg-info"><%= product.cat %></span>
+                <% if product.stat? %>
+                  <span class="badge bg-success">Active</span>
+                <% else %>
+                  <span class="badge bg-secondary">Inactive</span>
+                <% end %>
+              </p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="col-12 text-center py-5">
+        <h3>No products found</h3>
+        <p class="text-muted">Try adjusting your search or filter criteria</p>
+      </div>
+    <% end %>
+  </div>
+</div>
+<%= will_paginate @product , inner_window: 1, outer_window: 1%>
+
+
+
+  
+<footer class="bg-light text-center p-3 mt-5">
+<p>© 2024 GameStore. All rights reserved.</p>
+</footer>
+
+
+
+
+
+<style>
+.card {
+  transition: transform 0.2s;
+}
+.card:hover {
+  transform: translateY(-5px);
+}
+</style>
+
+<script>
+document.getElementById('productSearch').addEventListener('keyup', function() {
+  let search = this.value.toLowerCase();
+  document.querySelectorAll('.product-card').forEach(function(card) {
+    let title = card.querySelector('.card-title').textContent.toLowerCase();
+    card.style.display = title.includes(search) ? '' : 'none';
+  });
+});
+</script>

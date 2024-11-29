@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        .product-image { max-height: 400px; object-fit: contain; }
+        .stars { color: #ffc107; }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row">
+            <!-- Product Image -->
+            
+ <div class="col-md-6 mb-4">
+ <% if @product.avatar.attached? %>
+ <%= image_tag(@product.avatar, width: '175px', class: "img-fluid rounded product-image w-100", alt: @product.name) %>
+<% else %>
+ <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+   <span class="text-muted">No image</span>
+ </div>
+<% end %>
+</div>
+            <!-- Product Info -->
+            <div class="col-md-6">
+                <h1 class="mb-3"><%= @product.name %></h1>
+                
+                <!-- Rating -->
+                <div class="mb-3">
+                    <div class="stars">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-half"></i>
+                        <span class="text-muted ms-2">4.5 (128 reviews)</span>
+                    </div>
+                </div>
+
+                <!-- Price -->
+                <div class="mb-4">
+                    <h2 class="text-danger mb-0">$<%= number_with_precision(@product, precision: 2) %></h2>
+                    <small class="text-success">Free Delivery</small>
+                </div>
+
+                <!-- Description -->
+                <div class="mb-4">
+                    <h5>About this item</h5>
+                    <p class="text-muted"><%= @product%></p>
+                </div>
+
+                <!-- Stock Status -->
+                <div class="mb-4">
+                    <% if @product %>
+                        <p class="text-success"><i class="bi bi-check-circle-fill"></i> In Stock</p>
+                    <% else %>
+                        <p class="text-danger"><i class="bi bi-x-circle-fill"></i> Out of Stock</p>
+                    <% end %>
+                </div>
+
+                <!-- Add to Cart -->
+                <div class="mb-4">
+                    <div class="row g-3">
+                        <div class="col-auto">
+                            <select class="form-select" aria-label="Quantity">
+                                <% (1..10).each do |num| %>
+                                    <option value="<%= num %>"><%= num %></option>
+                                <% end %>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-primary w-100 mb-2">Add to Cart</button>
+                            <button class="btn btn-warning w-100">Buy Now</button>
+                        </div>
+                    </div>
+                </div>
+
+                  <div class="d-flex justify-content-between align-items-center mt-3">
+                    <h4 class="text-primary mb-0">$<%= number_with_precision(@product, precision: 2) %></h4>
+                    <%= button_to add_item_cart_path(@product), method: :post, class: "btn btn-primary" do %>
+                        <i class="fas fa-shopping-cart"></i> Add to Cart
+                    <% end %>
+                </div>
+
+                <!-- Additional Info -->
+                <div class="border-top pt-3">
+                    <div class="row row-cols-auto g-4">
+                        <div class="col">
+                            <i class="bi bi-shield-check text-success"></i>
+                            <small class="ms-2">Secure transaction</small>
+                        </div>
+                        <div class="col">
+                            <i class="bi bi-truck"></i>
+                            <small class="ms-2">Free delivery</small>
+                        </div>
+                        <div class="col">
+                            <i class="bi bi-arrow-return-left"></i>
+                            <small class="ms-2">30-day returns</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Details -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#details">Details</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#specs">Specifications</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#reviews">Reviews</button>
+                    </li>
+                </ul>
+                <div class="tab-content p-4 border border-top-0">
+                    <div class="tab-pane fade show active" id="details">
+                        <%= @product %>
+                    </div>
+                    <div class="tab-pane fade" id="specs">
+                        <table class="table table-striped">
+                            <tbody>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="reviews">
+                        <div class="text-center py-5">
+                            <h5>No reviews yet</h5>
+                            <p class="text-muted">Be the first to review this product</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

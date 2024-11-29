@@ -9,6 +9,7 @@
 
     <%= stylesheet_link_tag :map, "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%#= stylesheet_link_tag "active_admin", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
@@ -29,8 +30,21 @@
             <a class="nav-link" href="/home">Home <span class="sr-only"></span></a>
           </li>
           <li class="nav-item active">
-             <%= link_to 'Profile',root_path, class: 'nav-link' %>
+             <%= link_to 'Profile',profiles_path, class: 'nav-link' %>
           </li>
+          <li class="nav-item active">
+             <%= link_to 'Product',products_path, class: 'nav-link' %>
+          </li>
+          <li class="nav-item me-2">
+                  <%= link_to cart_path, class: 'nav-link position-relative' do %>
+                    <i class="fas fa-shopping-cart"></i>
+                    <% if cart_items_count > 0 %>
+                      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        <%= cart_items_count %>
+                      </span>
+                    <% end %>
+                  <% end %>
+                </li>
           <li class="nav-item">
             <a class="nav-link" href="#">Link</a>
           </li>
@@ -69,6 +83,9 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="/admin">Admin</a>
+            </li>
             <li class="nav-item active">
               <a class="nav-link" href="#">Home</a>
             </li>
